@@ -47,3 +47,5 @@ runs:
           export PATH="$HOME/.local/bin:$PATH"
           poetry install
           pip install -e .
+          # do this here so that we don't pollute the poetry.lock
+          pip install coveralls 
