@@ -1,6 +1,6 @@
 from osbot_utils.utils.Files import file_contents, path_combine
 
-import osbot_xyz
+import osbot_github_actions
 
 
 class Version:
@@ -8,7 +8,7 @@ class Version:
     FILE_NAME_VERSION = 'version'
 
     def path_code_root(self):
-        return osbot_xyz.path
+        return osbot_github_actions.path
 
     def path_version_file(self):
         return path_combine(self.path_code_root(), self.FILE_NAME_VERSION)

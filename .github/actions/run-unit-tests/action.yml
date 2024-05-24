@@ -8,9 +8,6 @@ inputs:
   package_name:
     description: 'Package name for coverage'
     required: true
-  GIT_HUB__ACCESS_TOKEN:
-    description: 'GIT_HUB__ACCESS_TOKEN'
-    required: true
 
 
 runs:
@@ -20,8 +17,7 @@ runs:
         shell: bash
         run: |
           coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests
-        env:
-          GIT_HUB__ACCESS_TOKEN: ${{ inputs.GIT_HUB__ACCESS_TOKEN }}
+
       - name: Print coverage report
         shell: bash
         run: |
