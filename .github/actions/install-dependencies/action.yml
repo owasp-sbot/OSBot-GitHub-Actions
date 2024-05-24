@@ -48,4 +48,4 @@ runs:
           poetry install
           pip install -e .
           # do this here so that we don't pollute the poetry.lock
-          pip install coveralls 
+          pip install coveralls pytest
