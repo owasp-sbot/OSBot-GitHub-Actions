@@ -5,8 +5,8 @@ description = "OWASP Security Bot - GitHub Actions"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "MIT"
 readme      = "README.md"
-homepage    = "https://github.com/owasp-sbot/OSBot-GitHub_Actions"
-repository  = "https://github.com/owasp-sbot/OSBot-GitHub_Actions"
+repository  = "https://github.com/owasp-sbot/OSBot-GitHub-Actions"
+homepage    = "https://github.com/owasp-sbot/OSBot-GitHub-Actions"
 
 [tool.poetry.dependencies]
 python          = "^3.11"

@@ -1,6 +1,12 @@
 name       : Publish to PyPI
 description: 'Publish to PyPI'
 
+inputs:
+  PYPI_API_TOKEN:
+    description: 'PYPI_API_TOKEN'
+    required: true
+
+
 runs:
     using: 'composite'
     steps:
@@ -28,7 +34,7 @@ runs:
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ input.PYPI_API_TOKEN }}
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          TWINE_PASSWORD: ${{ input.PYPI_API_TOKEN }}
