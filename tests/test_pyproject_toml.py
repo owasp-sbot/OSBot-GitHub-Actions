@@ -19,4 +19,4 @@ class test_pyproject_toml(unittest.TestCase):
         assert "Dinis Cruz <dinis.cruz@owasp.org>" in  tool_poetry['authors']
         assert tool_poetry['license'             ] == "MIT"
         assert tool_poetry['readme'              ] == "README.md"
-        assert tool_poetry['homepage'            ] == "https://github.com/owasp-sbot/OSBot-GitHub_Actions"
+        assert tool_poetry['homepage'            ] == "https://github.com/owasp-sbot/OSBot-GitHub-Actions"
