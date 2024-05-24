@@ -1,0 +1,9 @@
+# for setup
+setuptools
+python-dotenv
+git+https://github.com/owasp-sbot/OSBot-Utils.git@dev
+
+# for testing
+pytest
+pytest-cov
+coveralls
