@@ -1,0 +1,64 @@
+name       : Install Dependencies
+description: 'Install Dependencies'
+
+inputs:
+  aws_access_key_id:
+    description: 'AWS Account KEY ID'
+    required: true
+  aws_secret_access_key:
+    description: 'AWS Secret Access Key'
+    required: true
+  aws_default_region:
+    description: 'AWS Default region'
+    required: true
+  aws_account_id:
+    description: 'AWS Account ID'
+    required: true
+  ca_domain:
+    description: 'The AWS CodeArtifactory domain'
+    required: true
+
+runs:
+    using: 'composite'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      - name: Install Poetry
+        shell: bash
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry self add poetry-plugin-export
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            aws-access-key-id    : ${{ inputs.aws_access_key_id     }}
+            aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+            aws-region           : ${{ inputs.aws_default_region    }}
+
+      - name: Get CodeArtifact token
+        shell: bash
+        id: codeartifact-token
+        run: |
+          echo "aws codeartifact get-authorization-token --domain ${{ inputs.ca_domain }} --domain-owner ${{ inputs.aws_account_id }} --region ${{ inputs.aws_default_region }} --query authorizationToken --output text"
+          token=$(aws codeartifact get-authorization-token --domain ${{ inputs.ca_domain }} --domain-owner ${{ inputs.aws_account_id }} --region ${{ inputs.aws_default_region }} --query authorizationToken --output text)
+          echo "::add-mask::$token"
+          echo "TOKEN=$token" >> $GITHUB_ENV
+
+      - name: Configure Poetry for CodeArtifact
+        shell: bash
+        run: |
+          poetry config pypi-token.${{ inputs.ca_domain }} ${{ env.TOKEN }}
+          poetry config repositories.${{ inputs.ca_domain }} https://${{ inputs.ca_domain }}-${{ inputs.aws_account_id }}.d.codeartifact.${{ inputs.aws_default_region }}.amazonaws.com/pypi/${{ inputs.ca_domain }}/
+        
+
+      - name: Build and Publish package
+        shell: bash
+        run: |
+          poetry build
+          poetry publish -r ${{ inputs.ca_domain }}

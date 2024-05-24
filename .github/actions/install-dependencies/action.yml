@@ -26,26 +26,10 @@ runs:
           
           # poetry self add poetry-plugin-export      
 
-#      - name: Create Poetry venv
-#        shell: bash
-#        run: |
-#
-#          poetry env use python3.12
-#          source $(poetry env info --path)/bin/activate
-#          poetry export -f requirements.txt --output requirements.txt --with dev
-#      - name: Install dependencies (using PIP)
-#        shell: bash
-#        run: |
-#          export PATH="$HOME/.local/bin:$PATH"
-#          pip install -r requirements.txt
-#          pip install -e .
-
- #this wasn't working at all
       - name: Install dependencies (using Poetry)
         shell: bash
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           poetry install
-          pip install -e .
-          # do this here so that we don't pollute the poetry.lock
+          pip install -e .          
           pip install coveralls pytest
