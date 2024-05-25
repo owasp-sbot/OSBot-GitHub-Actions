@@ -1,5 +1,5 @@
-name       : Install Dependencies
-description: 'Install Dependencies'
+name       : Install Dependencies (using Poetry)
+description: 'Install Dependencies  (using Poetry)'
 
 runs:
     using: 'composite'
@@ -18,18 +18,19 @@ runs:
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
               ${{ runner.os }}-poetry-
+
       - name: Install Poetry
         shell: bash
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
-          
-          # poetry self add poetry-plugin-export      
+          export PATH="$HOME/.local/bin:$PATH"          
 
       - name: Install dependencies (using Poetry)
         shell: bash
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           poetry install
-          pip install -e .          
+          pip install -e .      
+          
+          # for now do this here 
           pip install coveralls pytest
