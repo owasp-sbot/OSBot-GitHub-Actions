@@ -2,9 +2,9 @@ name: Run Python Tests
 description: 'Run Python Tests'
 
 inputs:
-  codecov_token:
-    description: 'CodeCov access token'
-    required: true
+#  codecov_token:
+#    description: 'CodeCov access token'
+#    required: true
   package_name:
     description: 'Package name for coverage'
     required: true
@@ -22,7 +22,7 @@ runs:
         shell: bash
         run: |
           coverage report -m
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN         : ${{ inputs.codecov_token         }}
+#      - name: Upload coverage reports to Codecov
+#        uses: codecov/codecov-action@v4
+#        env:
+#          CODECOV_TOKEN         : ${{ inputs.codecov_token         }}
