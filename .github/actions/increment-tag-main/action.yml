@@ -82,6 +82,7 @@ runs:
     - name: Update Dev branch
       shell: bash
       run: |
-        git checkout dev
-        git merge main
+        git fetch origin
+        git checkout -b dev origin/dev
+        git merge origin/main
         git push origin dev
