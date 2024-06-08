@@ -30,7 +30,7 @@ runs:
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           poetry install
-          pip install -e .      
+          #pip install -e .      
           
           # for now do this here 
-          pip install coveralls pytest
+          #pip install coveralls pytest
