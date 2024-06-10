@@ -8,7 +8,8 @@ env:
   BRANCH            : 'dev'
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN   : ${{ secrets.DOCKERHUB_TOKEN }}
-  IMAGE_NAME        : 'diniscruz/osbot_github_actions'
+  PACKAGE_NAME      : 'osbot_github_actions'
+  DOCKER_HUB_ACCOUNT: 'diniscruz'
   DOCKER_CONTEXT    : '.'
   DOCKER_FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
 
@@ -38,7 +39,7 @@ jobs:
 #        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
 #        with:
 #          package_name : 'osbot_github_actions'
-#          target_branch: 'dev'
+#          target_branch: ${{ env.BRANCH }}
 #          release_type : 'minor'
 #    needs:
 #      - run-unit-tests
@@ -63,16 +64,23 @@ jobs:
 
       - name: Read version from file
         id: get_version
-        run: echo "IMAGE_TAG=$(cat ./osbot_github_actions/version)" >> $GITHUB_ENV
+        run: | 
+          echo "IMAGE_TAG=$(cat ./osbot_github_actions/version)" >> $GITHUB_ENV
+          echo "$IMAGE_TAG"
+          pwd
+          ls -la
+          ls -la ./deploy
+          ls -la ./deploy/docker
+          ls -la ./deploy/docker/osbot_github_actions__from_pip
 
       - name: Publish to dockerHub
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
         with:
-          DOCKERHUB_USERNAME: ${{ env.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN   : ${{ env.DOCKERHUB_TOKEN    }}
-          IMAGE_NAME        : ${{ env.IMAGE_NAME         }}
-          IMAGE_TAG         : ${{ env.IMAGE_TAG          }}
-          DOCKER_CONTEXT    : ${{ env.DOCKER_CONTEXT     }}
-          DOCKER_FILE       : ${{ env.DOCKER_FILE        }}
+          DOCKERHUB_USERNAME: "${{ env.DOCKERHUB_USERNAME }}"
+          DOCKERHUB_TOKEN   : "${{ env.DOCKERHUB_TOKEN    }}"
+          IMAGE_NAME        : "${{ env.DOCKER_HUB_ACCOUNT }}/${{ env.PACKAGE_NAME }}"
+          IMAGE_TAG         : "${{ env.IMAGE_TAG          }}"
+          DOCKER_CONTEXT    : "${{ env.DOCKER_CONTEXT     }}"
+          DOCKER_FILE       : "${{ env.DOCKER_FILE        }}"
 #    needs:
 #      - publish-to-pypi
