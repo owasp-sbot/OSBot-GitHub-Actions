@@ -38,7 +38,6 @@ jobs:
       - name: Increment Tag (for DEV)
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__increment-tag@dev
         with:
-          target_branch: ${{ env.BRANCH }}
           release_type : 'minor'
     needs:
       - run-unit-tests

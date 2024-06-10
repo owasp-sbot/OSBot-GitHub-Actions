@@ -20,4 +20,4 @@ runs:
           context: "${{env.DOCKER__CONTEXT}}"
           file   : "${{env.DOCKER__FILE}}"
           push   : true
-          tags   : "${{env.DOCKER__HUB_USERNAME}}/${{env.PACKAGE_NAME}}:${{env.VERSION}}"
+          tags   : "${{env.DOCKER_HUB__USERNAME}}/${{env.PACKAGE_NAME}}:${{env.VERSION}}"
