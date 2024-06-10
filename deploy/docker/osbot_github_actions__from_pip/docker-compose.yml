@@ -1,8 +1,8 @@
 services:
-  cbr_website_beta:
+  osbot_github_actions:
     build:
       context: ../../..
       dockerfile: ./deploy/docker/osbot_github_actions__from_pip/Dockerfile
     platform: linux/amd64
-    container_name: cbr-website-beta__using-pip
+    container_name: osbot_github_actions__from_pip
     tty: true
