@@ -1,6 +1,16 @@
 name       : Poetry - Install Dependencies
 description: 'Poetry - Install Dependencies'
 
+
+inputs:
+  pip_install:
+    description: 'Extra pip installs'
+    required: false
+  test_target:
+    description: 'the target folder for the tests'
+    required: false
+    default: 'tests/unit'
+
 runs:
     using: 'composite'
     steps:
@@ -30,4 +40,10 @@ runs:
         shell: bash
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          poetry install          
+          poetry install      
+
+      - name: Extra pip install  (using Poetry)
+        if: ${{ inputs.pip_install != '' }}
+        shell: bash
+        run: |          
+          poetry run ${{input.pip_install}}      
