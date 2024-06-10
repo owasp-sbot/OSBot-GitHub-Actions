@@ -30,17 +30,17 @@ jobs:
 #        with:
 #          package_name: 'osbot_github_actions'
 #
-#  increment-tag:
-#    name: Increment Tag - DEV
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#      - name: Increment Tag (for DEV)
-#        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
-#        with:
-#          package_name : 'osbot_github_actions'
-#          target_branch: ${{ env.BRANCH }}
-#          release_type : 'minor'
+  increment-tag:
+    name: Increment Tag - DEV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Increment Tag (for DEV)
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
+        with:
+          package_name : 'osbot_github_actions'
+          target_branch: ${{ env.BRANCH }}
+          release_type : 'minor'
 #    needs:
 #      - run-unit-tests
 
@@ -60,3 +60,5 @@ jobs:
 
       - name: Deploy to Docker Hub
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
+    needs:
+      - increment-tag
