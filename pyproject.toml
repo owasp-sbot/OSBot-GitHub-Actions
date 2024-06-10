@@ -9,12 +9,8 @@ repository  = "https://github.com/owasp-sbot/OSBot-GitHub-Actions"
 homepage    = "https://github.com/owasp-sbot/OSBot-GitHub-Actions"
 
 [tool.poetry.dependencies]
-python          = "^3.11"
-python-dotenv   = "*"
+python          = "^3.7"
 osbot_utils     = "*"
-
-[tool.poetry.group.dev.dependencies]
-pytest          = "*"
 
 
 [build-system]
