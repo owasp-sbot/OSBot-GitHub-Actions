@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "osbot_github_actions"
-version     = "v0.13.1"
+version     = "v0.14.0"
 description = "OWASP Security Bot - GitHub Actions"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "MIT"
