@@ -1,12 +1,6 @@
 name       : Publish to PyPI
 description: 'Publish to PyPI'
 
-#inputs:
-#  PYPI_API_TOKEN:
-#    description: 'PYPI_API_TOKEN'
-#    required: true
-
-
 runs:
     using: 'composite'
     steps:
@@ -21,11 +15,6 @@ runs:
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
 
-#      - name: Install dependencies
-#        shell: bash
-#        run: |
-#          poetry install
-
       - name: Build the package
         shell: bash
         run: | 
@@ -33,8 +22,3 @@ runs:
 
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-#        with:
-#          password: ${{ inputs.PYPI_API_TOKEN }}
-#        env:
-#          TWINE_USERNAME: __token__
-#          TWINE_PASSWORD: ${{ inputs.PYPI_API_TOKEN }}

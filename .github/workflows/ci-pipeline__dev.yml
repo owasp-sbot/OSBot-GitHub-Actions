@@ -4,6 +4,14 @@ on:
     branches:
       - dev
 
+env:
+  BRANCH            : 'dev'
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN   : ${{ secrets.DOCKERHUB_TOKEN }}
+  IMAGE_NAME        : 'diniscruz/osbot_github_actions'
+  DOCKER_CONTEXT    : '.'
+  DOCKER_FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
+
 jobs:
 
 #  run-unit-tests:
@@ -51,7 +59,7 @@ jobs:
       - name: Update Branch
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
         with:
-          branch: 'dev'
+          branch: ${{ env.BRANCH }}
 
       - name: Read version from file
         id: get_version
@@ -60,11 +68,11 @@ jobs:
       - name: Publish to dockerHub
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
         with:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN   : ${{ secrets.DOCKERHUB_TOKEN    }}
-          IMAGE_NAME        : "diniscruz/osbot_github_actions"
-          IMAGE_TAG         : ${{ env.IMAGE_TAG }}
-          DOCKER_CONTEXT    : "."
-          DOCKER_FILE       : "./deploy/docker/osbot_github_actions__from_pip"
+          DOCKERHUB_USERNAME: ${{ env.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN   : ${{ env.DOCKERHUB_TOKEN    }}
+          IMAGE_NAME        : ${{ env.IMAGE_NAME         }}
+          IMAGE_TAG         : ${{ env.IMAGE_TAG          }}
+          DOCKER_CONTEXT    : ${{ env.DOCKER_CONTEXT     }}
+          DOCKER_FILE       : ${{ env.DOCKER_FILE        }}
 #    needs:
 #      - publish-to-pypi
