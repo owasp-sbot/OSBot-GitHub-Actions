@@ -18,8 +18,6 @@ jobs:
 
       - name: Run Unit Tests (using Poetry)
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
-        with:
-          package_name: 'osbot_github_actions'
 
   increment-tag:
     name: Increment Tag - DEV
@@ -29,8 +27,6 @@ jobs:
       - name: Increment Tag (for DEV)
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
         with:
-          package_name : 'osbot_github_actions'
-          target_branch: 'main'
           release_type : 'major'
 
     needs:
@@ -55,3 +51,20 @@ jobs:
     #       token: ${{ secrets.GIT_HUB__ACCESS_TOKEN }}
     #       ref: dev
 
+  publish-to-docker-hub:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Git Update Current Branch
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
+
+      - name: Set $Version from file
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__read_version@dev
+
+      - name: Deploy to Docker Hub
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
+    needs:
+      - publish-to-pypi

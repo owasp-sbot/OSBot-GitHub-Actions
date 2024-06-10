@@ -1,0 +1,9 @@
+name       : 'Git - Update Branch'
+description: 'Git - Update Branch: use when previous actions published new commits'
+
+runs:
+    using: 'composite'
+    steps:
+      - name: Updates $VERSION with the current version value from the package
+        shell: bash
+        run: echo "VERSION=$(cat ./${{env.PACKAGE_NAME}}/version)" >> $GITHUB_ENV

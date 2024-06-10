@@ -2,12 +2,6 @@ name       : 'GitHub - Increment Tag'
 description: 'GitHub - Increment Tag'
 
 inputs:
-  package_name:
-    description: 'Package name for finding the version file'
-    required: true
-  target_branch:
-    description: 'target_branch'
-    required: true
   release_type:
     description: 'type of change: major or minor'
     required: true
@@ -27,12 +21,12 @@ runs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        ref: ${{inputs.target_branch}}
+        ref: ${{env.GIT__BRANCH}}
 
-    - name: Checkout ${{inputs.target_branch}} branch
+    - name: Checkout ${{env.GIT__BRANCH}} branch
       shell: bash
       run: |
-        git checkout ${{inputs.target_branch}} || (git checkout -b ${{inputs.target_branch}} && git push -u origin ${{inputs.target_branch}})
+        git checkout ${{env.GIT__BRANCH}} || (git checkout -b ${{env.GIT__BRANCH}} && git push -u origin ${{env.GIT__BRANCH}})
 
     - name: Set up Git user
       shell: bash
@@ -96,7 +90,7 @@ runs:
     - name: Update Version File (root)
       shell: bash
       run: |        
-        echo $NEW_TAG | sed 's/refs\/tags\///' > ./${{ inputs.package_name }}/version                
+        echo $NEW_TAG | sed 's/refs\/tags\///' > ./${{ env.PACKAGE_NAME }}/version                
 
     - name: Update Version in pyproject.toml
       shell: bash
@@ -107,9 +101,9 @@ runs:
     - name: Commit and push changes
       shell: bash
       run: |
-        git add README.md ./${{ inputs.package_name }}/version pyproject.toml
+        git add README.md ./${{ env.PACKAGE_NAME }}/version pyproject.toml
         git commit -m "Update release badge and version file"
-        git push origin ${{inputs.target_branch}}     # Push to the '${{inputs.target_branch}}' branch
+        git push origin ${{env.GIT__BRANCH}}     # Push to the '${{env.GIT__BRANCH}}' branch
 
     - name: Tag new version
       shell: bash
