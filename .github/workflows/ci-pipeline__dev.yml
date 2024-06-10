@@ -62,8 +62,8 @@ jobs:
         id: get_version
         run: echo "IMAGE_TAG=$(cat ./cbr_website_beta/version)" >> $GITHUB_ENV
 
-      - name: Install Dependencies
-        uses: ./.github/actions/publish-to-docker-hub
+      - name: Deploy to Docker Hub
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
         with:
           DOCKERHUB_USERNAME : ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN    : ${{ secrets.DOCKERHUB_TOKEN    }}
