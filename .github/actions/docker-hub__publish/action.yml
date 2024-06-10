@@ -34,6 +34,14 @@ runs:
           username: ${{ inputs.DOCKERHUB_USERNAME }}
           password: ${{ inputs.DOCKERHUB_TOKEN    }}
 
+      - name: show details (for debugging)
+        shell: bash
+        run: |          
+          echo "DOCKER_CONTEXT    : ${{ inputs.DOCKER_CONTEXT }}"
+          echo "DOCKER_FILE       : ${{ inputs.DOCKER_FILE }}"
+          echo "IMAGE_NAME        : ${{ inputs.IMAGE_NAME }}"
+          echo "IMAGE_TAG         : ${{ inputs.IMAGE_TAG }}"
+          
       - name: Build and push Docker image (${{inputs.IMAGE_NAME}}:${{inputs.IMAGE_TAG}})
         uses: docker/build-push-action@v5
         with:
