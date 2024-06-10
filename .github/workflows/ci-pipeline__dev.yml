@@ -12,7 +12,7 @@ env:
   DOCKER_HUB_ACCOUNT: 'diniscruz'
   DOCKER_CONTEXT    : "."
   DOCKER_FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
-  AAAA : "."
+
 jobs:
 
 #  run-unit-tests:
@@ -68,8 +68,8 @@ jobs:
           DOCKERHUB_USERNAME : ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN    : ${{ secrets.DOCKERHUB_TOKEN    }}
           IMAGE_NAME         : "${{env.DOCKER_HUB_ACCOUNT}}/${{env.PACKAGE_NAME}}"
-          #IMAGE_TAG          : ${{ env.IMAGE_TAG }}
-          IMAGE_TAG          : "."
+          IMAGE_TAG          : ${{ env.IMAGE_TAG }}
+          DOCKER_CONTEXT     : "."
           DOCKER_FILE        : "./deploy/docker/osbot_github_actions__from_pip/Dockerfile"
 
           #DOCKER_FILE        : "./deploy/docker/cbr-website-beta__using-pip/Dockerfile"
