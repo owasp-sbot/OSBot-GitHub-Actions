@@ -4,6 +4,14 @@ on:
     branches:
       - main
 
+env:
+  DOCKER__CONTEXT     : "."
+  DOCKER__FILE        : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
+  DOCKER_HUB__USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_HUB__TOKEN   : ${{ secrets.DOCKERHUB_TOKEN    }}
+  GIT__BRANCH         : 'main'
+  PACKAGE_NAME        : 'osbot_github_actions'
+
 jobs:
 
   run-unit-tests:
@@ -20,11 +28,11 @@ jobs:
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
 
   increment-tag:
-    name: Increment Tag - DEV
+    name: Increment Tag - MAIN
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Increment Tag (for DEV)
+      - name: Increment Tag (for MAIN)
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__increment-tag@dev
         with:
           release_type : 'major'
