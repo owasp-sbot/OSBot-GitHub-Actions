@@ -9,6 +9,7 @@ inputs:
   poetry_run:
     description: 'Extra poetry run execution'
     required: false
+    default: 'pip list'
   test_target:
     description: 'the target folder for the tests'
     required: false

@@ -15,26 +15,21 @@ jobs:
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__install@dev
         with:
           pip_install: '-r requirements-test.txt'
-          poetry_run : 'pip list'
 
       - name: Run Unit Tests (using Poetry)
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
         with:
           package_name: 'osbot_github_actions'
 
-
-
-#  increment-tag-dev:
-#    name: Increment Tag - DEV
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#      - name: Increment Tag (for DEV)
-#        #uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/increment-tag@dev
-#        uses: ./.github/actions/increment-tag
-#        with:
-#          package_name: 'cbr_website_beta'
-#          target_branch: 'dev'
-#    needs:
-#      - run-unit-tests
-#
+  increment-tag:
+    name: Increment Tag - DEV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Increment Tag (for DEV)
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
+        with:
+          package_name: 'cbr_website_beta'
+          target_branch: 'dev'
+    #needs:
+    #  - run-unit-tests
