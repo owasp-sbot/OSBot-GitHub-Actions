@@ -31,7 +31,7 @@ jobs:
         with:
           package_name : 'osbot_github_actions'
           target_branch: 'dev'
-          #release_type : 'minor'
+          release_type : 'minor'
 
-    #needs:
-    #  - run-unit-tests
+    needs:
+      - run-unit-tests
