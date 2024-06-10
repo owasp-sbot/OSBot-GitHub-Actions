@@ -41,11 +41,11 @@ runs:
           echo "DOCKER_FILE       : ${{ inputs.DOCKER_FILE }}"
           echo "IMAGE_NAME        : ${{ inputs.IMAGE_NAME }}"
           echo "IMAGE_TAG         : ${{ inputs.IMAGE_TAG }}"
-          
+
       - name: Build and push Docker image (${{inputs.IMAGE_NAME}}:${{inputs.IMAGE_TAG}})
         uses: docker/build-push-action@v5
         with:
-          context: "${{inputs.DOCKER_CONTEXT}}"
-          file   : "${{inputs.DOCKER_FILE}}"
+          context: ${{inputs.DOCKER_CONTEXT}}
+          file   : ${{inputs.DOCKER_FILE}}
           push   : true
           tags   : "${{inputs.IMAGE_NAME}}:${{inputs.IMAGE_TAG}}"
