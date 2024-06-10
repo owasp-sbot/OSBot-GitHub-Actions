@@ -9,7 +9,6 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN   : ${{ secrets.DOCKERHUB_TOKEN }}
   PACKAGE_NAME      : 'osbot_github_actions'
-  DOCKER_HUB__ACCOUNT: 'diniscruz'
   DOCKER__CONTEXT    : "."
   DOCKER__FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
 
@@ -53,13 +52,12 @@ jobs:
       - name: Publish to Docker Hub
         uses: actions/checkout@v4
 
-      - name: "Pull origin (to get latest value of the project's version)"
-        shell: bash
-        run: |
-          git fetch --no-tags origin ${{ env.BRANCH }}
-          git reset --hard FETCH_HEAD
+      - name: Update Branch
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
+        with:
+          branch: ${{ env.BRANCH }}
 
-      - name: Read version from file
+      - name: set version from file
         id: get_version
         run: echo "VERSION=$(cat ./${{env.PACKAGE_NAME}}/version)" >> $GITHUB_ENV
 
@@ -68,12 +66,6 @@ jobs:
         with:
           DOCKERHUB_USERNAME : ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN    : ${{ secrets.DOCKERHUB_TOKEN    }}
-          #IMAGE_NAME         : "${{env.DOCKER_HUB_ACCOUNT}}/${{env.PACKAGE_NAME}}"
-          #IMAGE_TAG          : ${{ env.IMAGE_TAG }}
-          #DOCKER_CONTEXT     : ${{ env.DOCKER_CONTEXT_2 }}
-          #DOCKER_FILE        : "./deploy/docker/osbot_github_actions__from_pip/Dockerfile"
-
-          #DOCKER_FILE        : "./deploy/docker/cbr-website-beta__using-pip/Dockerfile"
 
 
 #  publish-to-docker-hub:

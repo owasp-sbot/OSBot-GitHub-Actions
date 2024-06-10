@@ -31,4 +31,4 @@ runs:
           context: "${{env.DOCKER__CONTEXT}}"
           file   : "${{env.DOCKER__FILE}}"
           push   : true
-          tags   : "${{env.DOCKER_HUB__ACCOUNT}}/${{env.PACKAGE_NAME}}:${{env.VERSION}}"
+          tags   : "${{env.DOCKERHUB_USERNAME}}/${{env.PACKAGE_NAME}}:${{env.VERSION}}"
