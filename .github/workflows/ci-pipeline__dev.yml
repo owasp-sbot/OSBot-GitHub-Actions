@@ -49,64 +49,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Publish to Docker Hub
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Update Branch
+      - name: Git Update Current Branch
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
-        with:
-          branch: ${{ env.BRANCH }}
 
-      - name: set version from file
-        id: get_version
-        run: echo "VERSION=$(cat ./${{env.PACKAGE_NAME}}/version)" >> $GITHUB_ENV
+      - name: Set $Version from file
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__read_version@dev
 
       - name: Deploy to Docker Hub
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
-        with:
-          DOCKERHUB_USERNAME : ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN    : ${{ secrets.DOCKERHUB_TOKEN    }}
-
-
-#  publish-to-docker-hub:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Publish to Docker Hub
-#        uses: actions/checkout@v4
-#
-##      - name: "Pull origin (to get latest value of the project's version)"
-##        shell: bash
-##        run: |
-##          git fetch --no-tags origin ${{ github.ref }}
-##          git reset --hard FETCH_HEAD
-#
-#      - name: Update Branch
-#        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
-#        with:
-#          branch: ${{ env.BRANCH }}
-#
-#      - name: Read version from file
-#        id: get_version
-#        run: |
-#          echo "IMAGE_TAG=$(cat ./osbot_github_actions/version)" >> $GITHUB_ENV
-#          echo "$IMAGE_TAG"
-#          pwd
-#          ls -la
-#          ls -la ./deploy
-#          ls -la ./deploy/docker
-#          ls -la ./deploy/docker/osbot_github_actions__from_pip
-#
-#      - name: Publish to dockerHub
-#        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
-#        with:
-#          DOCKERHUB_USERNAME: "${{ env.DOCKERHUB_USERNAME }}"
-#          DOCKERHUB_TOKEN   : "${{ env.DOCKERHUB_TOKEN    }}"
-#          IMAGE_NAME        : "${{ env.DOCKER_HUB_ACCOUNT }}/${{ env.PACKAGE_NAME }}"
-#          IMAGE_TAG         : "${{ env.IMAGE_TAG          }}"
-#          DOCKER_CONTEXT    : "${{ env.DOCKER_CONTEXT     }}"
-#          DOCKER_FILE       : "${{ env.DOCKER_FILE        }}"
-
-
-#    needs:
-#      - publish-to-pypi

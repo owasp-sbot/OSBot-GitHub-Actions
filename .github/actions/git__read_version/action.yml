@@ -1,22 +1,9 @@
 name       : 'Git - Update Branch'
 description: 'Git - Update Branch: use when previous actions published new commits'
 
-
-inputs:
-  branch:
-    description: 'target_branch'
-    required: true
-  remote:
-    description: 'target_branch'
-    required: true
-    default: 'origin'
-
 runs:
     using: 'composite'
     steps:
-      - name: "Pull ${{ inputs.branch }} branch from remote ${{inputs.remote}}"
+      - name: Updates $VERSION with the current version value from the package
         shell: bash
-        run: |
-          echo "Pulling ${{ inputs.branch }} branch from remote ${{inputs.remote}}"
-          git fetch --no-tags ${{inputs.remote}} ${{ inputs.branch }}
-          git reset --hard FETCH_HEAD
+        run: echo "VERSION=$(cat ./${{env.PACKAGE_NAME}}/version)" >> $GITHUB_ENV
