@@ -26,7 +26,7 @@ runs:
       - name: Run tests with pytest (with coverage)
         shell: bash
         run: |          
-          poetry run coverage run --source=${{package_name}} -m pytest -v -s --durations=0 ${{test_target}}
+          poetry run coverage run --source=${{inputs.package_name}} -m pytest -v -s --durations=0 ${{inputs.test_target}}
       - name: Print coverage report
         shell: bash
         run: |
