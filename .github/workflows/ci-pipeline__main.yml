@@ -2,7 +2,7 @@ name       : CI Pipeline - MAIN
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
 
