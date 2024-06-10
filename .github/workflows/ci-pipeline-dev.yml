@@ -1,0 +1,34 @@
+name       : CI Pipeline - DEV
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Unit Tests (using Poetry)
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
+        with:
+          package_name: 'osbot_github_actions'
+
+
+
+#  increment-tag-dev:
+#    name: Increment Tag - DEV
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: Increment Tag (for DEV)
+#        #uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/increment-tag@dev
+#        uses: ./.github/actions/increment-tag
+#        with:
+#          package_name: 'cbr_website_beta'
+#          target_branch: 'dev'
+#    needs:
+#      - run-unit-tests
+#
