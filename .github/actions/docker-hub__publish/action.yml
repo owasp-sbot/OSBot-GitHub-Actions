@@ -9,18 +9,18 @@ inputs:
   DOCKERHUB_TOKEN:
     description: 'DOCKERHUB_TOKEN'
     required: true
-  IMAGE_NAME:
-    description: 'IMAGE_NAME'
-    required: true
-  IMAGE_TAG:
-    description: 'IMAGE_TAG'
-    required: true
-  DOCKER_CONTEXT:
-    description: 'DOCKER_CONTEXT'
-    required: true
-  DOCKER_FILE:
-    description: 'DOCKER_FILE'
-    required: true
+#  IMAGE_NAME:
+#    description: 'IMAGE_NAME'
+#    required: true
+#  IMAGE_TAG:
+#    description: 'IMAGE_TAG'
+#    required: true
+#  DOCKER_CONTEXT:
+#    description: 'DOCKER_CONTEXT'
+#    required: true
+#  DOCKER_FILE:
+#    description: 'DOCKER_FILE'
+#    required: true
 
 runs:
     using: 'composite'
@@ -37,15 +37,17 @@ runs:
       - name: show details (for debugging)
         shell: bash
         run: |          
-          echo "DOCKER_CONTEXT    : ${{ inputs.DOCKER_CONTEXT }}"
-          echo "DOCKER_FILE       : ${{ inputs.DOCKER_FILE }}"
-          echo "IMAGE_NAME        : ${{ inputs.IMAGE_NAME }}"
-          echo "IMAGE_TAG         : ${{ inputs.IMAGE_TAG }}"
+          echo "---------------------"
+          echo "DOCKER_CONTEXT    : ${{ env.DOCKER_CONTEXT }}"
+          echo "DOCKER_FILE       : ${{ env.DOCKER_FILE }}"
+          echo "IMAGE_NAME        : ${{ env.IMAGE_NAME }}"
+          echo "IMAGE_TAG         : ${{ env.IMAGE_TAG }}"
+          echo "---------------------"
 
       - name: Build and push Docker image (${{inputs.IMAGE_NAME}}:${{inputs.IMAGE_TAG}})
         uses: docker/build-push-action@v5
         with:
-          context: "${{inputs.DOCKER_CONTEXT}}"
-          file   : "${{inputs.DOCKER_FILE}}"
+          context: "${{env.DOCKER_CONTEXT}}"
+          file   : "${{env.DOCKER_FILE}}"
           push   : true
-          tags   : "${{inputs.IMAGE_NAME}}:${{inputs.IMAGE_TAG}}"
+          tags   : "${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}"

@@ -10,8 +10,8 @@ env:
   DOCKERHUB_TOKEN   : ${{ secrets.DOCKERHUB_TOKEN }}
   PACKAGE_NAME      : 'osbot_github_actions'
   DOCKER_HUB_ACCOUNT: 'diniscruz'
-  DOCKER_CONTEXT_2    : "."
-  #DOCKER_FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
+  DOCKER_CONTEXT    : "."
+  DOCKER_FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
 
 jobs:
 
@@ -67,10 +67,10 @@ jobs:
         with:
           DOCKERHUB_USERNAME : ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN    : ${{ secrets.DOCKERHUB_TOKEN    }}
-          IMAGE_NAME         : "${{env.DOCKER_HUB_ACCOUNT}}/${{env.PACKAGE_NAME}}"
-          IMAGE_TAG          : ${{ env.IMAGE_TAG }}
-          DOCKER_CONTEXT     : ${{ env.DOCKER_CONTEXT_2 }}
-          DOCKER_FILE        : "./deploy/docker/osbot_github_actions__from_pip/Dockerfile"
+          #IMAGE_NAME         : "${{env.DOCKER_HUB_ACCOUNT}}/${{env.PACKAGE_NAME}}"
+          #IMAGE_TAG          : ${{ env.IMAGE_TAG }}
+          #DOCKER_CONTEXT     : ${{ env.DOCKER_CONTEXT_2 }}
+          #DOCKER_FILE        : "./deploy/docker/osbot_github_actions__from_pip/Dockerfile"
 
           #DOCKER_FILE        : "./deploy/docker/cbr-website-beta__using-pip/Dockerfile"
 
