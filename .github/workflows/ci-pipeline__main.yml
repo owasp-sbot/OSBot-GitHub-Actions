@@ -33,8 +33,8 @@ jobs:
           target_branch: 'main'
           release_type : 'major'
 
-#    needs:
-#      - run-unit-tests
+    needs:
+      - run-unit-tests
 
   publish-to-pypi:
     permissions:
@@ -43,12 +43,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GIT_HUB__ACCESS_TOKEN }}
-        ref: dev
+      - uses: actions/checkout@v4
+      - name: publish-to-pypi
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/pypi__publish@dev
+    needs:
+      - increment-tag
 
-    - name: publish-to-pypi
-      uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/pypi__publish@dev
-#    needs:
-#      - increment-tag
+    # note: in this publish-to-pypi the actions/checkout@v4 needs this token for private repos (due to the id-token: write permission request)
+    # - uses: actions/checkout@v4
+    #     with:
+    #       token: ${{ secrets.GIT_HUB__ACCESS_TOKEN }}
+    #       ref: dev
+

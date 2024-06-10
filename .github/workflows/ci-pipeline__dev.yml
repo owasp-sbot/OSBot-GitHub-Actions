@@ -32,21 +32,5 @@ jobs:
           package_name : 'osbot_github_actions'
           target_branch: 'dev'
           release_type : 'minor'
-
     needs:
       - run-unit-tests
-
-  publish-to-pypi:
-    permissions:
-      id-token: write
-    name: "Publish to PYPI"
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-#        with:
-#          token: ${{ secrets.GIT_HUB__ACCESS_TOKEN }}
-#          ref: dev
-
-      - name: publish-to-pypi
-        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/pypi__publish@dev
