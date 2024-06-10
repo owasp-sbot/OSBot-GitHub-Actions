@@ -31,5 +31,5 @@ jobs:
         with:
           package_name: 'osbot_github_actions'
           target_branch: 'dev'
-    #needs:
+    needs:
     #  - run-unit-tests
