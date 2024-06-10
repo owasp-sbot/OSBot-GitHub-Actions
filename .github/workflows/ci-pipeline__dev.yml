@@ -71,6 +71,7 @@ jobs:
           IMAGE_TAG          : ${{ env.IMAGE_TAG }}
           DOCKER_CONTEXT     : "."
           DOCKER_FILE        : "./deploy/docker/osbot_github_actions__from_pip/Dockerfile"
+          
           #DOCKER_FILE        : "./deploy/docker/cbr-website-beta__using-pip/Dockerfile"
 
 
