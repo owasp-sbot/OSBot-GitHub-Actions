@@ -55,4 +55,4 @@ runs:
         if: ${{ inputs.poetry_run != '' }}
         shell: bash
         run: |          
-          poetry run pip ${{inputs.poetry_run}}
+          poetry run ${{inputs.poetry_run}}
