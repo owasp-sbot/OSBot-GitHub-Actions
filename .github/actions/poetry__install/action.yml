@@ -6,6 +6,9 @@ inputs:
   pip_install:
     description: 'Extra pip installs'
     required: false
+  poetry_run:
+    description: 'Extra poetry run execution'
+    required: false
   test_target:
     description: 'the target folder for the tests'
     required: false
@@ -42,8 +45,14 @@ runs:
           export PATH="$HOME/.local/bin:$PATH"
           poetry install      
 
-      - name: Extra pip install  (using Poetry)
+      - name: Extra pip install (using Poetry)
         if: ${{ inputs.pip_install != '' }}
         shell: bash
         run: |          
-          poetry run ${{inputs.pip_install}}      
+          poetry run pip install ${{inputs.pip_install}}      
+
+      - name: Extra poetry run execution
+        if: ${{ inputs.poetry_run != '' }}
+        shell: bash
+        run: |          
+          poetry run pip ${{inputs.poetry_run}}
