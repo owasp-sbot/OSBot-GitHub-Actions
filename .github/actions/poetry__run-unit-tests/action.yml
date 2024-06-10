@@ -1,0 +1,30 @@
+name: Poetry - Run Python Tests
+description: 'Poetry - Run Python Tests'
+
+inputs:
+  package_name:
+    description: 'Package name for code coverage'
+    required: true
+  test_target:
+    description: 'the target folder for the tests'
+    required: false
+    default: 'tests/unit'
+
+
+runs:
+    using: 'composite'
+    steps:
+
+      - name: Run tests with pytest (with coverage)
+        shell: bash
+        run: |          
+          poetry run coverage run --source=${{inputs.package_name}} -m pytest -v -s --durations=0 ${{inputs.test_target}}
+      - name: Print coverage report
+        shell: bash
+        run: |
+          poetry run coverage report -m
+
+#      - name: Upload coverage reports to Codecov
+#        uses: codecov/codecov-action@v3
+#        env:
+#          CODECOV_TOKEN         : ${{ inputs.codecov_token         }}

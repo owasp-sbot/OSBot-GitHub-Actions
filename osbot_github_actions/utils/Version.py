@@ -1,9 +1,10 @@
+from osbot_utils.base_classes.Type_Safe import Type_Safe
 from osbot_utils.utils.Files import file_contents, path_combine
 
 import osbot_github_actions
 
 
-class Version:
+class Version(Type_Safe):
 
     FILE_NAME_VERSION = 'version'
 

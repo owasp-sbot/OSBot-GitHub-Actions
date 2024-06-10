@@ -1,5 +1,19 @@
-name       : Install Dependencies (using Poetry)
-description: 'Install Dependencies  (using Poetry)'
+name       : Poetry - Install Dependencies
+description: 'Poetry - Install Dependencies'
+
+
+inputs:
+  pip_install:
+    description: 'Extra pip installs'
+    required: false
+  poetry_run:
+    description: 'Extra poetry run execution'
+    required: false
+    default: 'pip list'
+  test_target:
+    description: 'the target folder for the tests'
+    required: false
+    default: 'tests/unit'
 
 runs:
     using: 'composite'
@@ -30,8 +44,16 @@ runs:
         shell: bash
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          poetry install
-          #pip install -e .      
-          
-          # for now do this here 
-          #pip install coveralls pytest
+          poetry install      
+
+      - name: Extra pip install (using Poetry)
+        if: ${{ inputs.pip_install != '' }}
+        shell: bash
+        run: |          
+          poetry run pip install ${{inputs.pip_install}}      
+
+      - name: Extra poetry run execution
+        if: ${{ inputs.poetry_run != '' }}
+        shell: bash
+        run: |          
+          poetry run ${{inputs.poetry_run}}

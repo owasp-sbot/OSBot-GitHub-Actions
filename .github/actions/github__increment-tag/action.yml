@@ -1,0 +1,122 @@
+name       : 'GitHub - Increment Tag'
+description: 'GitHub - Increment Tag'
+
+inputs:
+  package_name:
+    description: 'Package name for finding the version file'
+    required: true
+  target_branch:
+    description: 'target_branch'
+    required: true
+  release_type:
+    description: 'type of change: major or minor'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Validate target_branch
+      shell: bash
+      run: |
+        if [[ "${{ inputs.release_type }}" != "major" && "${{ inputs.release_type }}" != "minor" ]]; then
+          echo "Invalid version_change: ${{ inputs.release_type }}. Only 'major' and 'minor' are supported."
+          exit 1
+        fi
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{inputs.target_branch}}
+
+    - name: Checkout ${{inputs.target_branch}} branch
+      shell: bash
+      run: |
+        git checkout ${{inputs.target_branch}} || (git checkout -b ${{inputs.target_branch}} && git push -u origin ${{inputs.target_branch}})
+
+    - name: Set up Git user
+      shell: bash
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+
+    - name: Fetch all tags
+      shell: bash
+      run: git fetch --tags
+
+
+    # WHEN release_type is MINOR
+    - name: Find and increment latest tag (FOR MINOR releases)
+      if: ${{ inputs.release_type == 'minor' }}
+      shell: bash
+      #id: latest_tag
+      run: |
+        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo "Latest tag: $LATEST_TAG"
+        
+        # Extract just the version part and increment it
+        VERSION_PART=$(echo $LATEST_TAG | sed 's/^v//')
+        MAJOR=$(echo $VERSION_PART | cut -d. -f1)
+        MINOR=$(echo $VERSION_PART | cut -d. -f2)
+        PATCH=$(echo $VERSION_PART | cut -d. -f3)
+        
+        NEW_PATCH=$((PATCH + 1))
+        
+        NEW_TAG="v$MAJOR.$MINOR.$NEW_PATCH"
+        echo "New tag: $NEW_TAG"
+        
+        echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+    # WHEN target_branch IS MAJOR
+    - name: Find and increment latest tag (FOR MAJOR releases)
+      if: ${{ inputs.release_type == 'major' }}
+      shell: bash
+      #id: latest_tag
+      run: |
+        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo "Latest tag: $LATEST_TAG"
+        
+        # Extract just the version part and increment it
+        VERSION_PART=$(echo $LATEST_TAG | sed 's/^v//')
+        MAJOR=$(echo $VERSION_PART | cut -d. -f1)
+        Z_PART=$(echo $VERSION_PART | cut -d. -f2)
+        
+        NEW_Z=$((Z_PART + 1))
+        
+        NEW_TAG="v$MAJOR.$NEW_Z.0"
+        echo "New tag: $NEW_TAG"
+        
+        echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+    - name: Update README badge
+      shell: bash
+      run: |        
+        sed -i "s/release-v[0-9]*\.[0-9]*\.[0-9]*/release-$NEW_TAG/" README.md
+
+    - name: Update Version File (root)
+      shell: bash
+      run: |        
+        echo $NEW_TAG | sed 's/refs\/tags\///' > ./${{ inputs.package_name }}/version                
+
+    - name: Update Version in pyproject.toml
+      shell: bash
+      run: |
+        #sed -i "s/version = \".*\"/version = \"$NEW_TAG\"/" pyproject.toml
+        sed -i "s/\(version[[:space:]]*=[[:space:]]*\)\".*\"/\1\"$NEW_TAG\"/" pyproject.toml
+
+    - name: Commit and push changes
+      shell: bash
+      run: |
+        git add README.md ./${{ inputs.package_name }}/version pyproject.toml
+        git commit -m "Update release badge and version file"
+        git push origin ${{inputs.target_branch}}     # Push to the '${{inputs.target_branch}}' branch
+
+    - name: Tag new version
+      shell: bash
+      run: |
+        NEW_TAG=${{ env.NEW_TAG }}
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+        git tag $NEW_TAG
+        git push origin $NEW_TAG
