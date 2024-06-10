@@ -10,7 +10,7 @@ env:
   DOCKERHUB_TOKEN   : ${{ secrets.DOCKERHUB_TOKEN }}
   PACKAGE_NAME      : 'osbot_github_actions'
   DOCKER_HUB_ACCOUNT: 'diniscruz'
-  DOCKER_CONTEXT    : "."
+  #DOCKER_CONTEXT    : "."
   #DOCKER_FILE       : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
 
 jobs:
