@@ -29,7 +29,7 @@ jobs:
       - name: Increment Tag (for DEV)
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
         with:
-          package_name: 'cbr_website_beta'
+          package_name: 'osbot_github_actions'
           target_branch: 'dev'
     #needs:
     #  - run-unit-tests
