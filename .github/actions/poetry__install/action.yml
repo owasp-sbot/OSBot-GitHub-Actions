@@ -46,4 +46,4 @@ runs:
         if: ${{ inputs.pip_install != '' }}
         shell: bash
         run: |          
-          poetry run ${{input.pip_install}}      
+          poetry run ${{inputs.pip_install}}      
