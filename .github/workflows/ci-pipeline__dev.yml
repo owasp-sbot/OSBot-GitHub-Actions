@@ -5,13 +5,8 @@ on:
       - dev
 
 env:
-  DOCKER__CONTEXT     : "."
-  DOCKER__FILE        : './deploy/docker/osbot_github_actions__from_pip/Dockerfile'
-  DOCKER_HUB__USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKER_HUB__TOKEN   : ${{ secrets.DOCKERHUB_TOKEN    }}
   GIT__BRANCH         : 'dev'
   PACKAGE_NAME        : 'osbot_github_actions'
-
 
 
 jobs:
