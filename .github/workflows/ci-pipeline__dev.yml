@@ -55,19 +55,19 @@ jobs:
       - name: "Pull origin (to get latest value of the project's version)"
         shell: bash
         run: |
-          git fetch --no-tags origin ${{ github.ref }}
+          git fetch --no-tags origin ${{ env.BRANCH }}
           git reset --hard FETCH_HEAD
 
       - name: Read version from file
         id: get_version
-        run: echo "IMAGE_TAG=$(cat ./cbr_website_beta/version)" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$(cat ./${{env.PACKAGE_NAME}}/version)" >> $GITHUB_ENV
 
       - name: Deploy to Docker Hub
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/docker-hub__publish@dev
         with:
           DOCKERHUB_USERNAME : ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN    : ${{ secrets.DOCKERHUB_TOKEN    }}
-          IMAGE_NAME         : "diniscruz/cbr_website_beta"
+          IMAGE_NAME         : "${{env.DOCKER_HUB_ACCOUNT}}/${{env.PACKAGE_NAME}}"
           IMAGE_TAG          : ${{ env.IMAGE_TAG }}
           DOCKER_CONTEXT     : "."
           DOCKER_FILE        : "./deploy/docker/osbot_github_actions__from_pip/Dockerfile"
