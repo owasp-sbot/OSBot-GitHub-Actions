@@ -1,14 +1,14 @@
-name       : 'Increment Tag'
-description: 'Increment Tag'
+name       : 'GitHub - Increment Tag'
+description: 'GitHub - Increment Tag'
 
 inputs:
   package_name:
-    description: 'Package name for coverage'
+    description: 'Package name for finding the version file'
     required: true
   target_branch:
-    description: 'target_branch'
+    description: 'target_branch (only main and dev supported at the moment)'
     required: true
-
+    # todo, this really should be changed to major and minor (instead of main and dev)
 
 runs:
   using: 'composite'
@@ -17,16 +17,12 @@ runs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
-    - name: List all branches
-      shell: bash
-      run: git branch -a
+        ref: ${{inputs.target_branch}}
 
     - name: Checkout ${{inputs.target_branch}} branch
       shell: bash
       run: |
         git checkout ${{inputs.target_branch}} || (git checkout -b ${{inputs.target_branch}} && git push -u origin ${{inputs.target_branch}})
-
 
     - name: Set up Git user
       shell: bash
@@ -38,9 +34,12 @@ runs:
       shell: bash
       run: git fetch --tags
 
-    - name: Find and increment latest tag
+
+    # WHEN target_branch IS DEV
+    - name: Find and increment latest tag (FOR DEV releases)
+      if: ${{ inputs.target_branch == 'dev' }}
       shell: bash
-      id: latest_tag
+      #id: latest_tag
       run: |
         LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
         echo "Latest tag: $LATEST_TAG"
@@ -58,6 +57,27 @@ runs:
         
         echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
+    # WHEN target_branch IS MAIN
+    - name: Find and increment latest tag (FOR MAIN releases)
+      if: ${{ inputs.target_branch == 'main' }}
+      shell: bash
+      #id: latest_tag
+      run: |
+        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo "Latest tag: $LATEST_TAG"
+        
+        # Extract just the version part and increment it
+        VERSION_PART=$(echo $LATEST_TAG | sed 's/^v//')
+        MAJOR=$(echo $VERSION_PART | cut -d. -f1)
+        Z_PART=$(echo $VERSION_PART | cut -d. -f2)
+        
+        NEW_Z=$((Z_PART + 1))
+        
+        NEW_TAG="v$MAJOR.$NEW_Z.0"
+        echo "New tag: $NEW_TAG"
+        
+        echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
     - name: Update README badge
       shell: bash
       run: |        
@@ -65,15 +85,14 @@ runs:
 
     - name: Update Version File (root)
       shell: bash
-      run: |
-        echo $NEW_TAG | sed 's/refs\/tags\///' > ./${{ inputs.package_name }}/version
+      run: |        
+        echo $NEW_TAG | sed 's/refs\/tags\///' > ./${{ inputs.package_name }}/version                
 
     - name: Update Version in pyproject.toml
       shell: bash
       run: |
         #sed -i "s/version = \".*\"/version = \"$NEW_TAG\"/" pyproject.toml
         sed -i "s/\(version[[:space:]]*=[[:space:]]*\)\".*\"/\1\"$NEW_TAG\"/" pyproject.toml
-
 
     - name: Commit and push changes
       shell: bash

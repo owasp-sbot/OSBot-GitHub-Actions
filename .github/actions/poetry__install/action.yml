@@ -1,5 +1,5 @@
-name       : Install Dependencies (using Poetry)
-description: 'Install Dependencies  (using Poetry)'
+name       : Poetry - Install Dependencies
+description: 'Poetry - Install Dependencies'
 
 runs:
     using: 'composite'
@@ -30,8 +30,4 @@ runs:
         shell: bash
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          poetry install
-          #pip install -e .      
-          
-          # for now do this here 
-          #pip install coveralls pytest
+          poetry install          

@@ -1,0 +1,38 @@
+name: Poetry - Run Python Tests
+description: 'Poetry - Run Python Tests'
+
+inputs:
+  package_name:
+    description: 'Package name for code coverage'
+    required: true
+  test_target:
+    description: 'the target folder for the tests'
+    required: false
+    default: 'tests/unit'
+
+
+runs:
+    using: 'composite'
+    steps:
+
+      - name: Poetry - Install Dependencies
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/install-dependencies-poetry@main
+
+      - name: install test dependencies
+        shell: bash
+        run: |
+          poetry run pip install -r requirements-test.txt
+
+      - name: Run tests with pytest (with coverage)
+        shell: bash
+        run: |          
+          poetry run coverage run --source=${{package_name}} -m pytest -v -s --durations=0 ${{test_target}}
+      - name: Print coverage report
+        shell: bash
+        run: |
+          poetry run coverage report -m
+
+#      - name: Upload coverage reports to Codecov
+#        uses: codecov/codecov-action@v3
+#        env:
+#          CODECOV_TOKEN         : ${{ inputs.codecov_token         }}
