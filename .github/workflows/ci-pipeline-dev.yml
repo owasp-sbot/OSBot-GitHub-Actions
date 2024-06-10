@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Poetry - Install Dependencies
-        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/install-dependencies-poetry@dev
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__install@dev
         with:
           pip_install: '-r requirements-test.txt'
 
