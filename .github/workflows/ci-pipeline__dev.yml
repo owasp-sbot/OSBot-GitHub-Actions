@@ -34,3 +34,32 @@ jobs:
           release_type : 'minor'
     needs:
       - run-unit-tests
+
+#  publish-to-docker-hub:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Publish to Docker Hub
+#        uses: actions/checkout@v4
+#
+#      - name: "Pull origin (to get latest value of the project's version)"
+#        shell: bash
+#        run: |
+#          git fetch --no-tags origin ${{ github.ref }}
+#          git reset --hard FETCH_HEAD
+#
+#      - name: Read version from file
+#        id: get_version
+#        run: echo "IMAGE_TAG=$(cat ./cbr_website_beta/version)" >> $GITHUB_ENV
+#
+#      - name: Install Dependencies
+#        uses: ./.github/actions/publish-to-docker-hub
+#        with:
+#          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+#          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN    }}
+#          IMAGE_NAME: "diniscruz/cbr_website_beta"
+#          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+#          DOCKER_CONTEXT: "."
+#          DOCKER_FILE: "./deploy/docker/cbr-website-beta__using-pip/Dockerfile"
+#    needs:
+#      - publish-to-pypi
