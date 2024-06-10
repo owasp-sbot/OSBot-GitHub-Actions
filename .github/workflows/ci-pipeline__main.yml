@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Increment Tag (for DEV)
-        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/github__increment-tag@dev
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__increment-tag@dev
         with:
           release_type : 'major'
 
