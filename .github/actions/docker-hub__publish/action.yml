@@ -1,7 +1,13 @@
 name       : 'Publish to Docker Hub'
 description: 'Publish container to docker hub'
 
-
+# needs these env vars:
+# DOCKER_HUB__USERNAME
+# DOCKER_HUB__TOKEN
+# DOCKER__CONTEXT
+# DOCKER__FILE
+# PACKAGE_NAME
+# VERSION
 runs:
     using: 'composite'
     steps:
