@@ -29,3 +29,5 @@ runs:
           tags   : | 
             ${{ env.DOCKER_HUB__USERNAME }}/${{ env.PACKAGE_NAME }}:${{env.VERSION}}
             ${{ env.DOCKER_HUB__USERNAME }}/${{ env.PACKAGE_NAME }}:latest
+          build-args: |
+            VERSION=${{ env.VERSION }}
