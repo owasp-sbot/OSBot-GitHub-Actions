@@ -1,0 +1,29 @@
+name: 'Start MinIO Server'
+description: 'Start MinIO server for testing'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Run MinIO
+      shell: bash
+      run: |
+        docker run -d -p 9000:9000 -p 9001:9001 \
+        -e MINIO_ROOT_USER=minioadmin \
+        -e MINIO_ROOT_PASSWORD=minioadmin \
+        --name minio-server \
+        minio/minio:latest server /data --console-address ":9001"
+
+    - name: Wait for MinIO to be ready
+      shell: bash
+      run: |
+        for i in {1..10}; do
+          if curl -s http://localhost:9001; then
+            echo "MinIO is ready"
+            break
+          fi
+          echo "Waiting for MinIO..."
+          sleep 5
+        done
