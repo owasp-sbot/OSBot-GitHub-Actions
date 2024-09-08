@@ -1,0 +1,29 @@
+name: 'Start DynamoDB Local'
+description: 'Start DynamoDB Local for testing'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Run DynamoDB Local
+      shell: bash
+      run: |
+        docker volume create dynamodb_data
+        docker run -d -p 8000:8000 \
+          --name dynamodb-local \
+          -v dynamodb_data:/home/dynamodblocal/data \
+          amazon/dynamodb-local
+
+    - name: Wait for DynamoDB Local to be ready
+      shell: bash
+      run: |
+        for i in {1..10}; do
+          if curl -s http://localhost:8000; then
+            echo "DynamoDB Local is ready"
+            break
+          fi
+          echo "Waiting for DynamoDB Local..."
+          sleep 5
+        done    
