@@ -1,0 +1,30 @@
+name       : 'Wait for PyPI Publish'
+description: 'Action to wait until a specific version of a PyPI package is available.'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Check PyPI Package Version
+      shell: bash
+      run: |
+        CLEAN_VERSION=${VERSION#v}  # Remove 'v' if it exists at the beginning
+        echo "Checking if package version $CLEAN_VERSION is available on PyPI..."
+        for i in {1..10}; do
+          echo "Attempt $i: Trying to install ${PACKAGE_NAME}==${CLEAN_VERSION}..."
+          pip install --no-deps  ${PACKAGE_NAME} || true
+          INSTALLED_VERSION=$(pip show ${PACKAGE_NAME} 2>/dev/null | grep Version | awk '{print $2}')
+          pip uninstall -y ${PACKAGE_NAME}
+          if [ "$INSTALLED_VERSION" == "$CLEAN_VERSION" ]; then
+            echo "Package version $CLEAN_VERSION is successfully installed."              
+            exit 0
+          fi
+          echo "Waiting for package version $CLEAN_VERSION to be available on PyPI..."
+          sleep 10
+        done
+        echo "Package version $CLEAN_VERSION is not available on PyPI after multiple attempts."
+        exit 1

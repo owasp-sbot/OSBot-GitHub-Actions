@@ -20,6 +20,9 @@ runs:
       - name: Set $Version from file
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__read_version@dev
 
+      - name: Wait for $Version to be available in pypi
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/pypi__wait-for-publish@dev
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
