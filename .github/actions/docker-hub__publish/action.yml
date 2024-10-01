@@ -15,10 +15,10 @@ runs:
         uses: docker/setup-buildx-action@v3
 
       - name: Git Update Current Branch
-        uses: .github/actions/git__update_branch@dev
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
 
       - name: Set $Version from file
-        uses: .github/actions/git__read_version@dev
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__read_version@dev
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
