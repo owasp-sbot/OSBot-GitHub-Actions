@@ -41,7 +41,7 @@ runs:
           context: "${{env.DOCKER__CONTEXT      }}"
           file: "${{env.DOCKER__FILE }}"
           push: true
-          tags: "${{env.AWS_ACCOUNT_ID}}.dkr.ecr.${{env.AWS_DEFAULT_REGION}}.amazonaws.com/cbr-website-beta_lambda:${{env.VERSION}}"
+          tags: "${{env.AWS_ACCOUNT_ID}}.dkr.ecr.${{env.AWS_DEFAULT_REGION}}.amazonaws.com/${{env.PACKAGE_NAME}}:${{env.VERSION}}"
           build-args: |
             VERSION=${{env.VERSION}}
             PACKAGE_NAME=${{env.PACKAGE_NAME}}
