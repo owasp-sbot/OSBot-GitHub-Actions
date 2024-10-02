@@ -1,0 +1,47 @@
+name       : "Publish to AWS ECR"
+description: 'Publish to AWS ECR'
+
+# needs ENV:
+#  GIT__BRANCH
+#  AWS_ACCESS_KEY_ID
+#  AWS_SECRET_ACCESS_KEY
+#  AWS_DEFAULT_REGION
+#  DOCKER__CONTEXT
+#  DOCKER__FILE
+#  VERSION
+#  PACKAGE_NAME
+
+runs:
+    using: 'composite'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Git Update Current Branch
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__update_branch@dev
+        with:
+          branch: ${{env.GIT__BRANCH}}
+
+      - name: Set $Version from file
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__read_version@dev
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Log in to Amazon ECR (Private)
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image (Private)
+        uses: docker/build-push-action@v5
+        with:
+          context: "${{env.DOCKER__CONTEXT      }}"
+          file: "${{env.DOCKER__FILE }}"
+          push: true
+          tags: "${{env.AWS_ACCOUNT_ID}}.dkr.ecr.${{env.AWS_DEFAULT_REGION}}.amazonaws.com/cbr-website-beta_lambda:${{env.VERSION}}"
+          build-args: |
+            VERSION=${{env.VERSION}}
+            PACKAGE_NAME=${{env.PACKAGE_NAME}}
