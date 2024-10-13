@@ -1,6 +1,21 @@
 name: 'Start LocalStack'
 description: 'Start LocalStack for testing'
 
+inputs:
+  LOCAL_STACK_SERVICES:
+    description: 'The LocalStack SERVICES to enable'
+    required: false
+    default: 's3,lambda,iam'
+  AWS_ACCESS_KEY_ID:
+    description: 'The AWS_ACCESS_KEY_ID to use'
+    required: false
+    default: 'localstack__key'
+  AWS_SECRET_ACCESS_KEY:
+    description: 'the AWS_SECRET_ACCESS_KEY'
+    required: false
+    default: 'localstack__secret'
+
+
 runs:
   using: 'composite'
   steps:
@@ -11,9 +26,9 @@ runs:
       shell: bash
       run: |
         docker run -d -p 4566:4566 -p 4510-4559:4510-4559 \
-        -e SERVICES=s3,lambda,iam \
-        -e AWS_ACCESS_KEY_ID=localstack \
-        -e AWS_SECRET_ACCESS_KEY=localstack \
+        -e SERVICES=${{ inputs.LOCAL_STACK_SERVICES }}\
+        -e AWS_ACCESS_KEY_ID=${{ inputs.AWS_ACCESS_KEY_ID }} \
+        -e AWS_SECRET_ACCESS_KEY=${{ inputs.AWS_SECRET_ACCESS_KEY }} \
         --name localstack-server \
         localstack/localstack:latest
 
