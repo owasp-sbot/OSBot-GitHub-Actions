@@ -1,0 +1,30 @@
+name: 'Start LocalStack'
+description: 'Start LocalStack for testing'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Run LocalStack
+      shell: bash
+      run: |
+        docker run -d -p 4566:4566 -p 4510-4559:4510-4559 \
+        -e SERVICES=s3,lambda,iam \
+        -e AWS_ACCESS_KEY_ID=localstack \
+        -e AWS_SECRET_ACCESS_KEY=localstack \
+        --name localstack-server \
+        localstack/localstack:latest
+
+    - name: Wait for LocalStack to be ready
+      shell: bash
+      run: |
+        for i in {1..10}; do
+          if curl -s http://localhost:4566/_localstack/health; then
+            echo "LocalStack is ready"
+            break
+          fi
+          echo "Waiting for LocalStack..."
+          sleep 5
+        done
