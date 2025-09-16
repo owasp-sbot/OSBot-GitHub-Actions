@@ -21,21 +21,23 @@ runs:
         rm -rf dist/
         poetry build
     
-    - name: Install publishing tools
+    - name: Install twine with OIDC support
       shell: bash
       run: |
-        pip install --upgrade twine pypi-publish
+        pip install --upgrade "twine>=5.0.0" id
     
     - name: Check package
       shell: bash
       run: |
         twine check dist/*
+        echo "Files to publish:"
+        ls -la dist/
     
-    - name: Mint OIDC token and publish
+    - name: Publish to PyPI using OIDC
       shell: bash
       run: |
-        # pypi-publish handles the OIDC token exchange automatically
-        pypi-publish --verbose
+        # The 'id' package provides OIDC token minting for PyPI
+        python -m twine upload dist/* --verbose
 
 # name       : Publish to PyPI
 # description: 'Publish to PyPI'
