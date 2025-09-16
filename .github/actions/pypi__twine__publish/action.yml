@@ -21,4 +21,5 @@ runs:
         python -m build
 
     - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.11.0
+      #uses: pypa/gh-action-pypi-publish@v1.11.0
+      uses: pypa/gh-action-pypi-publish@release/v1
