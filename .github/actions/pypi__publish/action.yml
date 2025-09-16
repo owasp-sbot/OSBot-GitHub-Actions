@@ -1,28 +1,67 @@
-name       : Publish to PyPI
-description: 'Publish to PyPI'
+name: Publish to PyPI
+description: 'Publish to PyPI with Trusted Publishing (OIDC)'
 
 runs:
-    using: 'composite'
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    
+    - name: Install Poetry
+      shell: bash
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+    
+    - name: Build package
+      shell: bash
+      run: |
+        rm -rf dist/
+        poetry build
+    
+    - name: Install publishing tools
+      shell: bash
+      run: |
+        pip install --upgrade twine pypi-publish
+    
+    - name: Check package
+      shell: bash
+      run: |
+        twine check dist/*
+    
+    - name: Mint OIDC token and publish
+      shell: bash
+      run: |
+        # pypi-publish handles the OIDC token exchange automatically
+        pypi-publish --verbose
 
-      - name: Install Poetry
-        shell: bash
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
+# name       : Publish to PyPI
+# description: 'Publish to PyPI'
 
-      - name: Build the package
-        shell: bash
-        run: | 
-          poetry build
+# runs:
+#     using: 'composite'
+#     steps:
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.12"
 
-      # see issue https://github.com/pypa/gh-action-pypi-publish/issues/290
-      #- name: Publish distribution 📦 to PyPI
-      #  uses: pypa/gh-action-pypi-publish@release/v1
+#       - name: Install Poetry
+#         shell: bash
+#         run: |
+#           curl -sSL https://install.python-poetry.org | python3 -
+#           export PATH="$HOME/.local/bin:$PATH"
+
+#       - name: Build the package
+#         shell: bash
+#         run: | 
+#           poetry build
+
+#       # see issue https://github.com/pypa/gh-action-pypi-publish/issues/290
+#       #- name: Publish distribution 📦 to PyPI
+#       #  uses: pypa/gh-action-pypi-publish@release/v1
       
-      - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.11.0
+#       - name: Publish distribution 📦 to PyPI
+#         uses: pypa/gh-action-pypi-publish@v1.11.0
